@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,16 +43,15 @@ public class Util {
      *            Le texte à analyser.
      * @param pKeyWords
      *            La liste des mots clés à chercher dans le texte.
-     * @return Vrai si le texte contient au moins un mot de la liste, faux sinon.
+     * @return le premier mot de la liste trouvé dans le texte s'il existe, null sinon.
      */
-    public static boolean containsKeyWord(String pText, List<String> pKeyWords) {
+    public static String containsKeyWord(String pText, List<String> pKeyWords) {
         for (String lKeyWord : pKeyWords) {
             if (pText.contains(lKeyWord)) {
-                LOG.debug("L'annonce: " + pText + " contient le mot: " + lKeyWord + ". L'annonce n'est pas valide.");
-                return true;
+                return lKeyWord;
             }
         }
-        return false;
+        return null;
     }
 
     /**

@@ -25,13 +25,13 @@ public class UtilTest extends TestCase {
         lList.add("union libre");
         lList.add("mari");
         lList.add("sexfriend");
-        assertTrue(Util.containsKeyWord("Jf black 22a cherche sexfriend idf", lList));
-        assertTrue(Util.containsKeyWord("Je suis ici pour mettre du gros piment dans ma vie sex, mon mari est trop traintrain mais je ne veux pas le quitter. Je suis joueuse et je veux rencontrer quelqu'un comme moi, qui a des fantasmes à réaliser. On en discute si possible par telephone avant de se rencontrer.\n" + 
+        assertNotNull(Util.containsKeyWord("Jf black 22a cherche sexfriend idf", lList));
+        assertNotNull(Util.containsKeyWord("Je suis ici pour mettre du gros piment dans ma vie sex, mon mari est trop traintrain mais je ne veux pas le quitter. Je suis joueuse et je veux rencontrer quelqu'un comme moi, qui a des fantasmes à réaliser. On en discute si possible par telephone avant de se rencontrer.\n" + 
                 "la discrétion est indispensable", lList));
-        assertTrue(Util.containsKeyWord("Femme secteur Asnières vivant en union libre souhaite rencontrer homme ou couple pour partager un vrai bon plan.\n" + 
+        assertNotNull(Util.containsKeyWord("Femme secteur Asnières vivant en union libre souhaite rencontrer homme ou couple pour partager un vrai bon plan.\n" + 
                 "Je suis déjà sortie en club sur Paris et j'ai même fait des plans au bois et dans d'autres lieux insolites.\n" + 
                 "Je peux vous appeler ou vous envoyer un sms si vous proposez des plans originaux: parking, cinéma, cabine essayage... etc....", lList));
-        assertFalse(Util.containsKeyWord("Je suis une jeune fille Asiatique qui désir faire des belles rencontres avec des hommes courtois et respectueux.", lList));
+        assertNull(Util.containsKeyWord("Je suis une jeune fille Asiatique qui désir faire des belles rencontres avec des hommes courtois et respectueux.", lList));
     }
     
 	/**

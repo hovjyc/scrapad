@@ -6,10 +6,10 @@ import org.apache.log4j.Logger;
  * Main class.
  */
 public final class App {
-    
+
     /** Logger. */
     private static final Logger LOG = Logger.getLogger(App.class);
-    
+
     /**
      * Private constructor.
      */
@@ -23,10 +23,15 @@ public final class App {
      *            The arguments
      */
     public static void main(final String[] pArgs) {
-        LOG.info("Chargement des fichiers de préférences.");
-        ResourcesManager.getInstance().load();
-        LOG.info("Scraping du site wannonce.");
-        Wannonce lWannonce = new Wannonce();
-        lWannonce.scrap();
+        try {
+            LOG.info("Chargement des fichiers de préférences.");
+            ResourcesManager.getInstance().load();
+            LOG.info("Scraping du site wannonce.");
+            Wannonce lWannonce = new Wannonce();
+            lWannonce.scrap();
+            ResourcesManager.getInstance().save();
+        } catch (InterruptedException e) {
+            LOG.fatal("Scraping interrompu: " + e.getMessage());
+        }
     }
 }

@@ -9,11 +9,8 @@ public class Ad {
     /** Titre de l'annonce */
     private String title;
     
-    /** Aperçu de la description de l'annonce (celle qui est lisible avant même de cliquer sur l'annonce)*/
-    private String descriptionPreview;
-    
-    /** Description complète de l'annonce (celle qui est lisible une fois que l'on a cliqué sur l'annonce) */
-    private String descriptionFull;
+    /** Description de l'annonce */
+    private String description;
     
     /** Lieu */
     private String location;
@@ -28,10 +25,11 @@ public class Ad {
     private String url;
 
     /** Constructeur */
-    public Ad(String pTitle, String pDescriptionPreview, String pLocation, Date pDate, String pURL) {
+    public Ad(String pTitle, String pPseudo, String pDescription, String pLocation, Date pDate, String pURL) {
         super();
         this.title = pTitle;
-        this.descriptionPreview = pDescriptionPreview;
+        this.pseudo = pPseudo;
+        this.description = pDescription;
         this.location = pLocation;
         this.date = pDate;
         this.url = pURL;
@@ -45,20 +43,12 @@ public class Ad {
         this.title = title;
     }
 
-    public String getDescriptionPreview() {
-        return descriptionPreview;
-    }
-
-    public void setDescriptionPreview(String descriptionPreview) {
-        this.descriptionPreview = descriptionPreview;
-    }
-
     public String getDescriptionFull() {
-        return descriptionFull;
+        return description;
     }
 
     public void setDescriptionFull(String descriptionFull) {
-        this.descriptionFull = descriptionFull;
+        this.description = descriptionFull;
     }
 
     public String getLocation() {
