@@ -8,11 +8,11 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.log4j.Logger;
@@ -36,19 +36,19 @@ public class ResourcesManager {
     private static final String PSEUDOS_FILE = RES_DIR + "pseudos";
 
     /** Mots clefs disqualifiant une annonce */
-    private List<String> badKeywords;
+    private Set<String> badKeywords;
 
     /** Date limite de récupération des annonces */
     private Date date;
 
     /** Les préférences de genre */
-    private List<Gender> genders;
+    private Set<Gender> genders;
 
     /** Mots clefs validant une annonces dans TOUS les cas */
-    private List<String> goodKeywords;
+    private Set<String> goodKeywords;
 
-    /** Liste des annonceurs ignorés */
-    private List<String> pseudos;
+    /** Set des annonceurs ignorés */
+    private Set<String> pseudos;
 
     /**
      * Constructor.
@@ -58,11 +58,11 @@ public class ResourcesManager {
     }
 
     /**
-     * Retourne la liste des mots clefs ignorés
+     * Retourne le set des mots clefs ignorés
      * 
-     * @return La liste des mots clefs ignorés
+     * @return Le set des mots clefs ignorés
      */
-    public List<String> getBadKeywords() {
+    public Set<String> getBadKeywords() {
         return badKeywords;
     }
 
@@ -76,20 +76,20 @@ public class ResourcesManager {
     }
 
     /**
-     * Retourne la liste des préférences de genre.
+     * Retourne le set des préférences de genre.
      * 
-     * @return Liste de genres.
+     * @return Set de genres.
      */
-    public List<Gender> getGenders() {
+    public Set<Gender> getGenders() {
         return genders;
     }
 
     /**
-     * Retourne la liste des bon mots clefs.
+     * Retourne le set des bon mots clefs.
      * 
-     * @return La liste de bons mots clés.
+     * @return Le set de bons mots clés.
      */
-    public List<String> getGoodKeywords() {
+    public Set<String> getGoodKeywords() {
         return goodKeywords;
     }
 
@@ -102,11 +102,11 @@ public class ResourcesManager {
     }
 
     /**
-     * Retourne la liste des pseudos ignorés.
+     * Retourne le set des pseudos ignorés.
      * 
-     * @return La liste des pseudos ignorés.
+     * @return Le set des pseudos ignorés.
      */
-    public List<String> getPseudos() {
+    public Set<String> getPseudos() {
         return pseudos;
     }
 
@@ -119,7 +119,7 @@ public class ResourcesManager {
             badKeywords = null;
             goodKeywords = null;
             pseudos = null;
-            genders = new ArrayList<Gender>();
+            genders = new HashSet<Gender>();
 
             readProperties();
             badKeywords = readFile(new File(RES_DIR + "badKeywords"));
@@ -141,26 +141,26 @@ public class ResourcesManager {
     }
 
     /**
-     * Lit un fichier texte et retourne une liste de string correspondant à ses
+     * Lit un fichier texte et retourne un set de string correspondant à ses
      * lignes
      * 
      * @param pFile
      *            Le fichier à lire
-     * @return le fichier sours forme de liste.
+     * @return le fichier sous forme de set.
      * @throws IOException
      *             Si pFile est null.
      */
-    private List<String> readFile(final File pFile) throws IOException {
-        List<String> lList = new ArrayList<String>();
+    private Set<String> readFile(final File pFile) throws IOException {
+        Set<String> lSet = new HashSet<String>();
         FileInputStream lFileInputStream = new FileInputStream(pFile);
         BufferedReader lBufferedReader = new BufferedReader(new InputStreamReader(lFileInputStream));
 
         String lLine = null;
         while ((lLine = lBufferedReader.readLine()) != null) {
-            lList.add(lLine);
+            lSet.add(lLine);
         }
         lBufferedReader.close();
-        return lList;
+        return lSet;
     }
 
     /**
@@ -200,7 +200,7 @@ public class ResourcesManager {
     }
 
     /**
-     * Sauvegarde la liste de pseudos dans un fichiers.
+     * Sauvegarde le set de pseudos dans un fichiers.
      * 
      * @throws IOException
      *             Si le fichier est inaccessible.

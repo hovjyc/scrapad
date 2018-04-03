@@ -1,10 +1,9 @@
 package org.hovjyc.scrapad;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.hovjyc.scrapad.Util;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
 import org.joda.time.DateTimeFieldType;
@@ -20,18 +19,18 @@ public class UtilTest extends TestCase {
      * Test de containsKeyWord()
      */
     public void testcontainsKeyWord() {
-        List<String> lList = new ArrayList<String>();
-        lList.add("en couple");
-        lList.add("union libre");
-        lList.add("mari");
-        lList.add("sexfriend");
-        assertNotNull(Util.containsKeyWord("Jf black 22a cherche sexfriend idf", lList));
+        Set<String> lSet = new HashSet<String>();
+        lSet.add("en couple");
+        lSet.add("union libre");
+        lSet.add("mari");
+        lSet.add("sexfriend");
+        assertNotNull(Util.containsKeyWord("Jf black 22a cherche sexfriend idf", lSet));
         assertNotNull(Util.containsKeyWord("Je suis ici pour mettre du gros piment dans ma vie sex, mon mari est trop traintrain mais je ne veux pas le quitter. Je suis joueuse et je veux rencontrer quelqu'un comme moi, qui a des fantasmes à réaliser. On en discute si possible par telephone avant de se rencontrer.\n" + 
-                "la discrétion est indispensable", lList));
+                "la discrétion est indispensable", lSet));
         assertNotNull(Util.containsKeyWord("Femme secteur Asnières vivant en union libre souhaite rencontrer homme ou couple pour partager un vrai bon plan.\n" + 
                 "Je suis déjà sortie en club sur Paris et j'ai même fait des plans au bois et dans d'autres lieux insolites.\n" + 
-                "Je peux vous appeler ou vous envoyer un sms si vous proposez des plans originaux: parking, cinéma, cabine essayage... etc....", lList));
-        assertNull(Util.containsKeyWord("Je suis une jeune fille Asiatique qui désir faire des belles rencontres avec des hommes courtois et respectueux.", lList));
+                "Je peux vous appeler ou vous envoyer un sms si vous proposez des plans originaux: parking, cinéma, cabine essayage... etc....", lSet));
+        assertNull(Util.containsKeyWord("Je suis une jeune fille Asiatique qui désir faire des belles rencontres avec des hommes courtois et respectueux.", lSet));
     }
     
 	/**

@@ -4,9 +4,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,10 +41,10 @@ public class Util {
      * @param pText
      *            Le texte à analyser.
      * @param pKeyWords
-     *            La liste des mots clés à chercher dans le texte.
-     * @return le premier mot de la liste trouvé dans le texte s'il existe, null sinon.
+     *            La collection des mots clés à chercher dans le texte.
+     * @return le premier mot de la collection trouvé dans le texte s'il existe, null sinon.
      */
-    public static String containsKeyWord(String pText, List<String> pKeyWords) {
+    public static String containsKeyWord(String pText, Collection<String> pKeyWords) {
         for (String lKeyWord : pKeyWords) {
             if (pText.contains(lKeyWord)) {
                 return lKeyWord;
