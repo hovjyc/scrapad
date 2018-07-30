@@ -1,9 +1,10 @@
-package org.hovjyc.scrapad;
+package org.hovjyc.scrapad.business;
 
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hovjyc.scrapad.business.Util;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
 import org.joda.time.DateTimeFieldType;

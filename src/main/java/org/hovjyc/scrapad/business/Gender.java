@@ -1,4 +1,4 @@
-package org.hovjyc.scrapad;
+package org.hovjyc.scrapad.business;
 
 /**
  * Gender.

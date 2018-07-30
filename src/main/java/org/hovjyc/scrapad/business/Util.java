@@ -1,4 +1,4 @@
-package org.hovjyc.scrapad;
+package org.hovjyc.scrapad.business;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,33 +16,33 @@ import com.google.common.base.CharMatcher;
 import com.google.common.primitives.Ints;
 
 /**
- * Classe de fonctions utilitaires
+ * Util class
  */
 public class Util {
 
-    /** Format de date pour les annonces de plus d'un jour et de moins d'un an. */
+    /** Date format for ads older than one day and younger than one year. */
     private static final String DD_MMMMM = "dd MMMMM";
 
-    /** Format de date enregistré dans les ressources. */
+    /** Date format saved in ressources. */
     private static final String DDMMYYYY = "dd/MM/yyyy";
 
-    /** Format de date pour les annonces de plus d'un an. */
+    /** Date format for ads older than one year. */
     private static final String DD_MMMMM_YYYY = "dd MMMMM yyyy";
 
-    /** The differents wannonce date formats */
+    /** The different wannonce date formats */
     private static final String[] DATE_FORMATS = { DD_MMMMM, DD_MMMMM_YYYY, DDMMYYYY };
 
     /** Logger of the class. */
     private static final Logger LOG = Logger.getLogger(Util.class);
 
     /**
-     * Cherche les mots clés à dans pText.
+     * Search keywords in pText.
      * 
      * @param pText
-     *            Le texte à analyser.
+     *            The text to browse.
      * @param pKeyWords
-     *            La collection des mots clés à chercher dans le texte.
-     * @return le premier mot de la collection trouvé dans le texte s'il existe, null sinon.
+     *            The collection of keywords to search in the text.
+     * @return The first word of the collection found in the text if exists, null otherwise.
      */
     public static String containsKeyWord(String pText, Collection<String> pKeyWords) {
         for (String lKeyWord : pKeyWords) {
