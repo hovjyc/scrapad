@@ -1,9 +1,9 @@
-package org.hovjyc.scrapad.business;
+package org.hovjyc.scrapad.business.enums;
 
 /**
  * Gender.
  */
-public enum Gender {
+public enum GenderEnum {
     /** The available genders. */
     HOMME("homme"), FEMME("femme"), COUPLE("couple");
 
@@ -15,7 +15,7 @@ public enum Gender {
      * @param pGenderStr
      *            The gender
      */
-    Gender(final String pGenderStr) {
+    GenderEnum(final String pGenderStr) {
         this.genderStr = pGenderStr;
     }
 
@@ -25,8 +25,8 @@ public enum Gender {
      *            The gender in String format.
      * @return The gender in enum format.
      */
-    public static Gender fromString(final String pGenderStr) {
-        for (Gender lGender : Gender.values()) {
+    public static GenderEnum fromString(final String pGenderStr) {
+        for (GenderEnum lGender : GenderEnum.values()) {
             if (lGender.genderStr.equalsIgnoreCase(pGenderStr)) {
                 return lGender;
             }

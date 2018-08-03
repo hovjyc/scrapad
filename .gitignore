@@ -4,3 +4,8 @@
 .classpath
 .project
 .settings/
+src/main/resources/badKeywords
+src/main/resources/goodKeywords
+src/main/resources/pseudos
+src/main/resources/scrapad.properties
+			  

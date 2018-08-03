@@ -16,6 +16,8 @@ import java.util.Set;
 
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.log4j.Logger;
+import org.hovjyc.scrapad.business.enums.GenderEnum;
+import org.hovjyc.scrapad.business.enums.SiteEnum;
 import org.hovjyc.scrapad.common.IScrapadConstants;
 import org.joda.time.DateTime;
 
@@ -37,7 +39,7 @@ public class ResourcesManager {
 	private Date date;
 
 	/** Gender preferences */
-	private Set<Gender> genders;
+	private Set<GenderEnum> genders;
 
 	/** Key words validating an ad in ALL cases */
 	private Set<String> goodKeywords;
@@ -47,6 +49,9 @@ public class ResourcesManager {
 
 	/** All ignored pseudos */
 	private Set<String> pseudos;
+
+	/** The site to scrap. */
+	private SiteEnum site;
 
 	/**
 	 * Constructor.
@@ -78,7 +83,7 @@ public class ResourcesManager {
 	 * 
 	 * @return Gender set.
 	 */
-	public Set<Gender> getGenders() {
+	public Set<GenderEnum> getGenders() {
 		return genders;
 	}
 
@@ -115,6 +120,15 @@ public class ResourcesManager {
 	 */
 	public Set<String> getPseudos() {
 		return pseudos;
+	}
+
+	/**
+	 * Get the site to scrap
+	 * 
+	 * @return The site to scrap.
+	 */
+	public SiteEnum getSite() {
+		return site;
 	}
 
 	/**
@@ -208,7 +222,7 @@ public class ResourcesManager {
 		lProperties.setProperty("maxads", String.valueOf(maxNbAds));
 		lProperties.setProperty("date", Util.stringFromDate(date));
 		StringBuilder lStringBuilder = new StringBuilder();
-		for (Gender lGender : genders) {
+		for (GenderEnum lGender : genders) {
 			if (lStringBuilder.length() > 0) {
 				lStringBuilder.append(",");
 			}
@@ -217,6 +231,7 @@ public class ResourcesManager {
 		if (lStringBuilder.length() > 0) {
 			lProperties.setProperty("gender", lStringBuilder.toString());
 		}
+		lProperties.setProperty("site", site.toString());
 		lProperties.save(lFileOutput, null);
 		lFileOutput.close();
 	}
@@ -239,6 +254,16 @@ public class ResourcesManager {
 	 */
 	public void setMaxNbAds(int lMaxNbAds) {
 		this.maxNbAds = lMaxNbAds;
+	}
+
+	/**
+	 * Set the site to scrap.
+	 * 
+	 * @param site
+	 *            The site name
+	 */
+	public void setSite(SiteEnum site) {
+		this.site = site;
 	}
 
 	/**
@@ -272,7 +297,7 @@ public class ResourcesManager {
 	 */
 	private void readProperties() throws IOException {
 		date = null;
-		genders = new HashSet<Gender>();
+		genders = new HashSet<GenderEnum>();
 		FileInputStream lFileInput = new FileInputStream(new File(IScrapadConstants.RES_DIR + "scrapad.properties"));
 		Properties lProperties = new Properties();
 		lProperties.load(lFileInput);
@@ -292,21 +317,28 @@ public class ResourcesManager {
 			date = Util.dateFromString(lDate);
 		}
 		LOG.info("date butoire: " + date);
-		Collection<String> lGendersStr = new DefaultListDelimiterHandler(',').split(lProperties.getProperty("gender"), true);
+		Collection<String> lGendersStr = new DefaultListDelimiterHandler(',').split(lProperties.getProperty("gender"),
+				true);
 
 		if (lGendersStr != null) {
 			for (String lGenderStr : lGendersStr) {
-				Gender lGender = Gender.fromString(lGenderStr);
+				GenderEnum lGender = GenderEnum.fromString(lGenderStr);
 				if (lGender != null) {
 					genders.add(lGender);
 				}
 			}
 		}
+		site = SiteEnum.fromString(lProperties.getProperty("site"));
+		if (site == null) {
+			LOG.warn("scrapad.properties: pas de site trouvé. " + "Attention à bien orthographier les site."
+					+ "Le site 'wannonce' sera utilisé par défaut.");
+			site = SiteEnum.WANNONCE;
+		}
 		if (genders.isEmpty()) {
 			LOG.warn("scrapad.properties: pas de genre trouvé. "
 					+ "Attention à bien orthographier les genres au singulier."
 					+ "Le genre 'femme' sera utilisé par défaut.");
-			genders.add(Gender.FEMME);
+			genders.add(GenderEnum.FEMME);
 		}
 	}
 
