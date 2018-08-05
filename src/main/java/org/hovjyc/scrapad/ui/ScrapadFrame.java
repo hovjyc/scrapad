@@ -68,6 +68,9 @@ public class ScrapadFrame extends JFrame implements IAdScrapListener {
 
 	/** Logger. */
 	private static final Logger LOG = Logger.getLogger(ScrapadFrame.class);
+	
+	/** Max number of ads. */
+	private static final int MAX_AD_COUNT = 200;
 
 	/** The table width */
 	private static final int TABLE_WIDTH = 1000;
@@ -370,7 +373,7 @@ public class ScrapadFrame extends JFrame implements IAdScrapListener {
 		lNbPanel.setAlignmentX(LEFT_ALIGNMENT);
 		JLabel nbMaxLabel = new JLabel("Nombre maximal d'annonces:");
 		JSpinner lNumberSpinner;
-		numberSpinnerModel = new SpinnerNumberModel(ResourcesManager.getInstance().getMaxNbAds(), 0, 50, 1);
+		numberSpinnerModel = new SpinnerNumberModel(ResourcesManager.getInstance().getMaxNbAds(), 0, MAX_AD_COUNT, 1);
 		numberSpinnerModel.addChangeListener(new ChangeListener() {
 
 			@Override

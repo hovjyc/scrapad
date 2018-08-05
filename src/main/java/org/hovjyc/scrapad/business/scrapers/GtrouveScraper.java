@@ -44,15 +44,16 @@ public class GtrouveScraper extends AbstractScraper {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void scrap() throws ScrapadException {
+	public int scrap() throws ScrapadException {
 		LOG.info("====================");
 		LOG.info("Recherche rubrique échangiste.");
 		LOG.info("====================");
-		scrap(url_echangiste);
+		int lNbAds = scrap(url_echangiste, 1, 0);
 		LOG.info("====================");
 		LOG.info("Recherche rubrique sans lendemain.");
 		LOG.info("====================");
-		scrap(url_sans_lendemain);
+		lNbAds += scrap(url_sans_lendemain, 1, lNbAds);
+		return lNbAds;
 	}
 
 	/**
@@ -60,21 +61,22 @@ public class GtrouveScraper extends AbstractScraper {
 	 * 
 	 * @param pURL
 	 *            The URL from which we get the ads
-	 * @return The list of ads to contact.
+	 * @return The number of ads scraped.
 	 * 
 	 * @throws ScrapadException
 	 *             Scraping interrompu
 	 */
-	private void scrap(String pURL) throws ScrapadException {
+	private int scrap(String pURL, int pPage, int pNbAds) throws ScrapadException {
 		LOG.info("Formulaire: recherche en île-de-france. Type de petites annonces : Recherches");
 		Response lResponse;
 		try {
-			lResponse = Jsoup.connect(pURL).ignoreContentType(true).userAgent(IScrapadConstants.USER_AGENT)
+			String lURL = pURL + "p-" + pPage + "/";
+			lResponse = Jsoup.connect(lURL).ignoreContentType(true).userAgent(IScrapadConstants.USER_AGENT)
 					.referrer(IScrapadConstants.REFERER).timeout(TIMEOUT).followRedirects(true).execute();
-			int lNbAds = 0;
+			int lNbAds = pNbAds;
 			Document lPage = lResponse.parse();
 			Elements lAds = lPage.getElementsByClass("td_titel");
-			for(Element lAdElt : lAds) {
+			for (Element lAdElt : lAds) {
 				LOG.info("-------------------------------");
 				LOG.info("Analyse d'une nouvelle annonce.");
 				Elements lDateLocationElt = lAdElt.getElementsByClass("description");
@@ -83,20 +85,17 @@ public class GtrouveScraper extends AbstractScraper {
 					String[] lDateLocation = lDateLocationElt.text().split("  |  \n");
 					Date lDate = Util.dateFromString(lDateLocation[0]);
 					String lLocation = lDateLocation[2];
-					// The browse stops if the date is too old or if the max number of ads is reached.
-					// There are two links to scrap, so we take half ads of the max for each.
-					if (lDate.compareTo(ResourcesManager.getInstance().getDate()) < 0
-							|| lNbAds >= ResourcesManager.getInstance().getMaxNbAds() / 2) {
+					if (lDate.compareTo(ResourcesManager.getInstance().getDate()) < 0) {
 						// Ad too old : end of the scrap.
-						LOG.info("fin du parcours");
-						return;
+						LOG.info("Date de la prochaine annonce: " + lDate + ". Fin du parcours");
+						return lNbAds;
 					}
 					if (lLocation == null || lLocation.isEmpty()) {
 						LOG.error("Erreur: Impossible de récupérer la ville.");
 					} else {
 						Elements lTitleElt = lAdElt.getElementsByTag("a");
 						String lTitle = lTitleElt.text();
-						String lURL = lTitleElt.attr("abs:href");
+						String lAdURL = lTitleElt.attr("abs:href");
 						// URL and title scraped.
 						String lTxtAd = lAdElt.text();
 						String lBadKeyWord = Util.containsKeyWord(lTxtAd,
@@ -108,10 +107,10 @@ public class GtrouveScraper extends AbstractScraper {
 							LOG.info("Annonce '" + lTitle + "': date, titre, descriptions, ville et URL OK.");
 							LOG.info("date: " + lDate.toString());
 							LOG.info("ville: " + lLocation);
-							LOG.info("URL: " + lURL);
+							LOG.info("URL: " + lAdURL);
 							LOG.info("Ouverture de l'annonce dans: " + lPause + " ms.");
 							Thread.sleep(lPause);
-							Response lAdResponse = Jsoup.connect(lURL).ignoreContentType(true)
+							Response lAdResponse = Jsoup.connect(lAdURL).ignoreContentType(true)
 									.userAgent(IScrapadConstants.USER_AGENT).referrer(IScrapadConstants.REFERER)
 									.timeout(TIMEOUT).followRedirects(true).execute();
 							Document lAdPage = lAdResponse.parse();
@@ -151,10 +150,21 @@ public class GtrouveScraper extends AbstractScraper {
 										String lGoodWord = Util.containsKeyWord(lDescription,
 												ResourcesManager.getInstance().getGoodKeywords());
 										if (lGoodWord != null) {
-											Ad lAd = new Ad(lTitle, lPseudo, lDescription, lLocation, lDate, lURL);
+											Ad lAd = new Ad(lTitle, lPseudo, lDescription, lLocation, lDate, lAdURL);
 											LOG.info("Mot qualifiant trouvé : '" + lGoodWord
 													+ "'. Ajout de l'annonce dans la liste.");
 											fireAdScraped(lAd);
+											lNbAds++;
+											// if pNbads = 0, no ads were scraped before this function call.
+											if ((pNbAds == 0
+													&& lNbAds >= ResourcesManager.getInstance().getMaxNbAds() / 2)
+													|| pNbAds > 0
+															&& lNbAds >= ResourcesManager.getInstance().getMaxNbAds()) {
+												// Ad too old : end of the scrap.
+												LOG.info("Nombre d'annonces affichées : " + lNbAds
+														+ ". Fin du parcours");
+												return lNbAds;
+											}
 										} else {
 											String lBadWord = Util.containsKeyWord(lDescription,
 													ResourcesManager.getInstance().getBadKeywords());
@@ -163,9 +173,17 @@ public class GtrouveScraper extends AbstractScraper {
 														+ "'. Utilisateur '" + lPseudo + "' banni.");
 												ResourcesManager.getInstance().getPseudos().add(lPseudo);
 											} else {
-												Ad lAd = new Ad(lTitle, lPseudo, lDescription, lLocation, lDate, lURL);
+												Ad lAd = new Ad(lTitle, lPseudo, lDescription, lLocation, lDate,
+														lAdURL);
 												LOG.info("Ajout de l'annonce dans la liste.");
 												fireAdScraped(lAd);
+												lNbAds++;
+												if (lNbAds >= ResourcesManager.getInstance().getMaxNbAds() / 2) {
+													// Ad too old : end of the scrap.
+													LOG.info("Nombre d'annonces affichées : " + lNbAds
+															+ ". Fin du parcours");
+													return lNbAds;
+												}
 											}
 										}
 									}
@@ -175,8 +193,10 @@ public class GtrouveScraper extends AbstractScraper {
 						}
 					}
 				}
-				lNbAds++;
 			}
+			int lNewPage = pPage + 1;
+			LOG.info("Ouverture de la page: " + lNewPage);
+			return scrap(pURL, lNewPage, lNbAds);
 		} catch (InterruptedException e) {
 			String lMessage = "Thread de pause interrompu lors du parcours des exceptions: " + pURL + ".";
 			LOG.error(lMessage + e.getMessage());

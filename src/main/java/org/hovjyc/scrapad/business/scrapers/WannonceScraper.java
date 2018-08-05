@@ -46,29 +46,30 @@ public class WannonceScraper extends AbstractScraper {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void scrap() throws ScrapadException {
+	public int scrap() throws ScrapadException {
 		for (GenderEnum lGender : ResourcesManager.getInstance().getGenders()) {
 			switch (lGender) {
 			case COUPLE:
 				LOG.info("====================");
 				LOG.info("Recherche de couples");
 				LOG.info("====================");
-				scrap(url_couple);
+				return scrap(url_couple);
 			case FEMME:
 				LOG.info("====================");
 				LOG.info("Recherche de femmes");
 				LOG.info("====================");
-				scrap(url_woman);
+				return scrap(url_woman);
 			case HOMME:
 				LOG.info("====================");
 				LOG.info("Recherche d'hommes");
 				LOG.info("====================");
-				scrap(url_man);
+				return scrap(url_man);
 			default:
 				LOG.error("Genre inconnu: " + lGender);
 				break;
 			}
 		}
+		return 0;
 	}
 
 	/**
@@ -76,14 +77,15 @@ public class WannonceScraper extends AbstractScraper {
 	 * 
 	 * @param pURL
 	 *            The URL from which we get the ads
-	 * @return The list of ads to contact.
+	 * @return The number of ads scraped.
 	 * 
 	 * @throws ScrapadException,
 	 *             IOException Scraping interrompu
 	 */
-	private void scrap(String pURL) throws ScrapadException {
+	private int scrap(String pURL) throws ScrapadException {
 		LOG.info("Formulaire: recherche en île-de-france. Type de petites annonces : Recherches");
 		Response lResponse;
+		int lNbAds = 0;
 		try {
 			lResponse = Jsoup.connect(pURL).ignoreContentType(true).userAgent(IScrapadConstants.USER_AGENT)
 					.referrer(IScrapadConstants.REFERER).timeout(TIMEOUT).followRedirects(true).execute();
@@ -104,7 +106,7 @@ public class WannonceScraper extends AbstractScraper {
 					if (lDate.compareTo(ResourcesManager.getInstance().getDate()) < 0) {
 						// The scraping stops when the parsed ads are too old.
 						LOG.info("fin du parcours");
-						return;
+						return lNbAds;
 					}
 					// The date is ok.
 					// We get the location.
@@ -162,6 +164,7 @@ public class WannonceScraper extends AbstractScraper {
 												LOG.info("Mot qualifiant trouvé : '" + lGoodWord
 														+ "'. Ajout de l'annonce dans la liste.");
 												fireAdScraped(lAd);
+												lNbAds++;
 											} else {
 												String lBadWord = Util.containsKeyWord(lDescription,
 														ResourcesManager.getInstance().getBadKeywords());
@@ -180,6 +183,7 @@ public class WannonceScraper extends AbstractScraper {
 															lURL);
 													LOG.info("Ajout de l'annonce dans la liste.");
 													fireAdScraped(lAd);
+													lNbAds++;
 												}
 											}
 										}
@@ -200,9 +204,9 @@ public class WannonceScraper extends AbstractScraper {
 			throw new ScrapadException(lMessage);
 		} catch (IOException e) {
 			String lMessage = "Impossible de se connecter à l'URL: " + pURL;
-			LOG.error("Impossible de se connecter à l'URL: " + pURL
-					+ e.getMessage());
+			LOG.error("Impossible de se connecter à l'URL: " + pURL + e.getMessage());
 			throw new ScrapadException(lMessage);
-		} 
+		}
+		return lNbAds;
 	}
 }

@@ -54,6 +54,7 @@ public abstract class AbstractScraper {
 	 * 
 	 * @throws ScrapadException
 	 *             Scraping interrupted
+	 * @return The number of ads scraped.
 	 */
-	public abstract void scrap() throws ScrapadException;
+	public abstract int scrap() throws ScrapadException;
 }
