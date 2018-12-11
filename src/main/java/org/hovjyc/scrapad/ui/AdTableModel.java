@@ -141,8 +141,8 @@ public class AdTableModel extends AbstractTableModel {
 	 * @param pAdsToContact
 	 *            The ads to display
 	 */
-	public void setAdContent(Ad pAd) {
-		Vector<Object> lRowData = new Vector<Object>();
+	public void setAdContent(final Ad pAd) {
+		final Vector<Object> lRowData = new Vector<Object>();
 		String lText = pAd.getTitle() + "\n" + pAd.getPseudo() + " - " + pAd.getDate() + " - " + pAd.getLocation()
 				+ "\n" + pAd.getDescription();
 		lRowData.addElement(lText);

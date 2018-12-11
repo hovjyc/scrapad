@@ -22,7 +22,6 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -38,7 +37,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
 
 import org.apache.log4j.Logger;
 import org.hovjyc.scrapad.business.IAdScrapListener;
@@ -140,7 +138,7 @@ public class ScrapadFrame extends JFrame implements IAdScrapListener {
 		buildFrame();
 		loadOptions();
 		setVisible(true);
-		setExtendedState(this.MAXIMIZED_BOTH);
+		setExtendedState(MAXIMIZED_BOTH);
 	}
 
 	/**
@@ -251,7 +249,7 @@ public class ScrapadFrame extends JFrame implements IAdScrapListener {
 
 		// Create components
 		
-		JPanel lCheckBoxesPanel = new JPanel();
+		final JPanel lCheckBoxesPanel = new JPanel();
 		JLabel lGenreLabel = new JLabel("Genre:");
 		manCb = new JCheckBox("Homme");
 		manCb.addItemListener(new ItemListener() {
@@ -554,6 +552,8 @@ public class ScrapadFrame extends JFrame implements IAdScrapListener {
 					// required to trap key events
 					padding.requestFocus();
 					scraper.scrap();
+					// save the bad pseudos found during the scrap.
+					ResourcesManager.getInstance().savePseudos();
 				} catch (ScrapadException e) {
 					JOptionPane.showMessageDialog(null, e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
 					LOG.error("Scraping interrompu" + e.getMessage());
@@ -565,112 +565,6 @@ public class ScrapadFrame extends JFrame implements IAdScrapListener {
 		};
 
 		thread.start();
-
-		// adTableModel.setAdContent(new Ad("Cunnisdoigter à volonté", "Averel",
-		// "Black fougueux et endurant amateur de rondes ;) doigt magique cunnis à en
-		// trembler annonce réel et sérieuse. ouvert au proposition.",
-		// "Île-de-France\n" + "Meaux", new Date(), "http://www.wannonce.com/Averel"));
-		// adTableModel.setAdContent(new Ad("Jolie algérienne aux jolies formes", "Barmy
-		// Army",
-		// "Coucou je suis disponible pas de mauvaises surprises mes photos sont
-		// totalement réel",
-		// "Île-de-France\n" + "Athis mons", new Date(),
-		// "http://www.wannonce.com/barmyarmy"));
-		// adTableModel.setAdContent(new Ad("Pour jeune femme à la découverte de sa
-		// sexualité ou de ses limites",
-		// "Clarence Carver",
-		// "Vous êtes une jeune femme inexpérimentée à la découverte de sa sexualité ou
-		// libérée souhaitant tester ses limites. vous êtes attirée par les hommes ...",
-		// "Île-de-France\n" + "Paris et ile-de-france", new Date(),
-		// "http://www.wannonce.com/calrencecarver"));
-		// adTableModel.setAdContent(new Ad("Belle fille", "Danny Brennan",
-		// "Bonjour belle fille en paris pour vous, en deplacament uniquement.bisses",
-		// "Île-de-France\n" + "Paris er ardt", new Date(),
-		// "http://www.wannonce.com/dannybrennan"));
-		// adTableModel.setAdContent(new Ad("Kiss kiss", "Edouard",
-		// "J'aime les hommes\n propres et respectueux\n l'hygiène avant \ntous je n'en
-		// dirai pas plus \ncontactez moi !",
-		// "Île-de-France\n" + "Paris", new Date(), "http://www.wannonce.com/edouard"));
-		// adTableModel.setAdContent(new Ad("Sexy jeune fille pour massage", "Fox",
-		// "Bonjour je suis une jolie masseuse expérimenté, je vous propose de passer un
-		// moment sympas avec moi a mon domicile. ne reponds pas au numéro masqué et
-		// ...",
-		// "Île-de-France\n" + "Villejuif", new Date(), "http://www.wannonce.com/fox"));
-		// adTableModel.setAdContent(new Ad("Domina hard pour soumis confirmés", "Gros
-		// lard",
-		// "Je suis maitresse nadia et j'adore maltraiter mes soumis en leurs infligeant
-		// de bonne correction. j'utilise pour vous corriger cravache, paddle, martinet
-		// ...",
-		// "Île-de-France\n" + "Paris", new Date(),
-		// "http://www.wannonce.com/groslard"));
-		// adTableModel.setAdContent(new Ad("Jolie masseuse vous masse sur paris",
-		// "Heavy Metal Hero",
-		// "Bonjour je suis une jolie brune adorant masser et je vous propose un
-		// délicieux massage naturiste plein de sensualité. mes mains fines et douce
-		// sauront ...",
-		// "Île-de-France\n" + "Paris", new Date(),
-		// "http://www.wannonce.com/heavymetalhero"));
-		// adTableModel.setAdContent(new Ad("Chiotte", "Imp",
-		// "Bonjour mesdames, mesdemoiselles. esclave mâle blanc de 39 ans à disposition
-		// de femmes et jeunes femmes dominatrices. asservissement et vénération. ...",
-		// "Île-de-France\n" + "Paris", new Date(), "http://www.wannonce.com/imp"));
-		// adTableModel.setAdContent(new Ad("H recherche jeune femme", "Jackson
-		// MacDouglas",
-		// "Recherche jeune femme pour quelques heures ou une nuit.", "Île-de-France\n"
-		// + "Paris eme arr",
-		// new Date(), "http://www.wannonce.com/jacksonmacdouglas"));
-		// adTableModel.setAdContent(new Ad("D'une beauté exotique à paris 13e",
-		// "Kanvas",
-		// "Bonjour, je suis une jeune femme asiatique a 26 ans, je vous propose un
-		// super massage dans une très agréable calme ambiance dans mon appartement est
-		// proche ...",
-		// "Île-de-France\n" + "Paris", new Date(), "http://www.wannonce.com/kanvas"));
-		// adTableModel.setAdContent(new Ad("Jolie fille asiatique, photo réelle", "Lost
-		// soul",
-		// "Bonjour je suis une fille asiatique, je pratique de très bons massages pour
-		// les hommes dans mon propre appartement. bienvenue, merci.",
-		// "Île-de-France\n" + "Paris", new Date(),
-		// "http://www.wannonce.com/lostsoul"));
-		// adTableModel.setAdContent(
-		// new Ad("Nouvell dans ta region", "Monsieur Soulier", "Oublier lexterieur sa
-		// ce pass icii",
-		// "Île-de-France\n" + "Paris", new Date(),
-		// "http://www.wannonce.com/monsieursoulier"));
-		// adTableModel.setAdContent(new Ad("Qui pour une fell folle, sulfureuse et
-		// abusive?", "Nemelispas",
-		// "J'aime tout...mais actuellement je suis tenté par une inversion des rôles :
-		// m'offrir à une femme sulfureuse qui aimera prendre possession de moi, me
-		// peloter ...",
-		// "Île-de-France\n" + "Paris", new Date(),
-		// "http://www.wannonce.com/nemelispas"));
-		// adTableModel.setAdContent(new Ad("Belle kimoua", "Pyromaniac",
-		// "Belle et ronde femme africaine pour passage. hygiène irréprochable .pas
-		// d'appels masqués ni sms",
-		// "Île-de-France\n" + "Aubervilliers", new Date(),
-		// "http://www.wannonce.com/pyromaniac"));
-		// adTableModel.setAdContent(new Ad("Masseuse belle de paris", "Qirex",
-		// "Bonjour je suis une jolie masseuse expérimenté, je vous propose de passer un
-		// moment sympas avec moi a mon domicile. ne reponds pas au numéro masqué et
-		// ...",
-		// "Île-de-France\n" + "Paris", new Date(), "http://www.wannonce.com/qirex"));
-		// adTableModel.setAdContent(new Ad("Natalia", "Roux",
-		// "Bonjour)). je suis une jeune charmant jolie fille, réelle et naturelle.
-		// merci.",
-		// "Île-de-France\n" + "Paris", new Date(), "http://www.wannonce.com/roux"));
-		// adTableModel.setAdContent(new Ad("Jolie brune pulpeuse", "Skartt",
-		// "Cc nouvelle a paris a coter metro miromesnil . mes photos sont vraie. sms
-		// plus simple pour moi . bizoux",
-		// "Île-de-France\n" + "Paris", new Date(), "http://www.wannonce.com/skartt"));
-		// adTableModel.setAdContent(new Ad("Sarah sensuelle", "Trashman",
-		// "Sarah 22 ans marocaine premier fois dans la ville pour le massage. je reÇoit
-		// dans un endroitt propre et discret. je préfère des homme respectueux et
-		// courtois ...",
-		// "Île-de-France\n" + "Sarcelles", new Date(),
-		// "http://www.wannonce.com/trashman"));
-		// adTableModel.setAdContent(new Ad("Massage sensuel a paris 13eme", "Vince",
-		// "Bonjour je suis une jolie et sexy femme asiatique je vous accueille dans un
-		// appartement calme et privé à ne réponds pas aux appels masqués, ni aux ...",
-		// "Île-de-France\n" + "Paris", new Date(), "http://www.wannonce.com/vince"));
 	}
 
 	/**

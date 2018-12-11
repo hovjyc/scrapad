@@ -100,7 +100,10 @@ public class GtrouveScraper extends AbstractScraper {
 						String lTxtAd = lAdElt.text();
 						String lBadKeyWord = Util.containsKeyWord(lTxtAd,
 								ResourcesManager.getInstance().getBadKeywords());
-						if (lBadKeyWord != null) {
+						String lGoodKeyWord = Util.containsKeyWord(lTxtAd,
+                                ResourcesManager.getInstance().getGoodKeywords());
+                        // The good keyword has the priority on the bad keyword.
+						if (lBadKeyWord != null && lGoodKeyWord == null) {
 							LOG.info("Annonce '" + lTitle + "' rejetée car contenant le mot: '" + lBadKeyWord + "'");
 						} else {
 							int lPause = new Random().nextInt(WAIT_TIME);
@@ -156,6 +159,9 @@ public class GtrouveScraper extends AbstractScraper {
 											fireAdScraped(lAd);
 											lNbAds++;
 											// if pNbads = 0, no ads were scraped before this function call.
+											// / 2 is used because two category of two differents URL
+											// are searched in the same time.
+											// It permits to have the two genders ads.
 											if ((pNbAds == 0
 													&& lNbAds >= ResourcesManager.getInstance().getMaxNbAds() / 2)
 													|| pNbAds > 0

@@ -1,7 +1,7 @@
 package org.hovjyc.scrapad.business;
 
 import org.apache.log4j.Logger;
-import org.hovjyc.scrapad.business.scrapers.GtrouveScraper;
+import org.hovjyc.scrapad.business.scrapers.WannonceScraper;
 import org.hovjyc.scrapad.common.ScrapadException;
 
 /**
@@ -29,10 +29,10 @@ public final class Core {
     		LOG.info("Chargement des fichiers de préférences.");
     		ResourcesManager.getInstance().load();
     		LOG.info("Scraping du site wannonce.");
-    		//  WannonceScraper lWannonce = new WannonceScraper();
-    		//lWannonce.scrap();
-    		GtrouveScraper lGtrouve = new GtrouveScraper();
-    		lGtrouve.scrap();
+    		WannonceScraper lWannonce = new WannonceScraper();
+    		lWannonce.scrap();
+    		//GtrouveScraper lGtrouve = new GtrouveScraper();
+    		//lGtrouve.scrap();
     		ResourcesManager.getInstance().save();
     	} catch (ScrapadException e) {
     		LOG.fatal("Scraping interrompu: " + e.getMessage());
