@@ -61,10 +61,14 @@ public class GtrouveScraper extends AbstractScraper {
 	 * 
 	 * @param pURL
 	 *            The URL from which we get the ads
+	 * @param pPage
+     *            The page number
+     * @param pNbAds
+     *            The number of ads scraped before this scrap
 	 * @return The number of ads scraped.
 	 * 
 	 * @throws ScrapadException
-	 *             Scraping interrompu
+	 *             Scraping error
 	 */
 	private int scrap(String pURL, int pPage, int pNbAds) throws ScrapadException {
 		LOG.info("Formulaire: recherche en île-de-france. Type de petites annonces : Recherches");

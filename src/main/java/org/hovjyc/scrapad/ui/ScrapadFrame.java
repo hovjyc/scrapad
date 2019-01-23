@@ -139,6 +139,7 @@ public class ScrapadFrame extends JFrame implements IAdScrapListener {
 		loadOptions();
 		setVisible(true);
 		setExtendedState(MAXIMIZED_BOTH);
+		System.out.println("sdg");
 	}
 
 	/**
@@ -342,6 +343,8 @@ public class ScrapadFrame extends JFrame implements IAdScrapListener {
 		lSitePanel.add(lSiteLabel);
 		lSitePanel.add(wannonceRadio);
 		lSitePanel.add(gtrouveRadio);
+		//TODO rewrite scrapper since the new version of gtrouve.
+		gtrouveRadio.setEnabled(false);
 		
 		lOptionsColumn1.add(lSitePanel);
 		lOptionsColumn1.add(lGenderPanel);
@@ -511,11 +514,12 @@ public class ScrapadFrame extends JFrame implements IAdScrapListener {
 	 */
 	private void loadOptions() {
 		ResourcesManager.getInstance().load();
-		if (ResourcesManager.getInstance().getSite().equals(SiteEnum.WANNONCE)) {
+		//TODO only wannonce for the moment.
+	//	if (ResourcesManager.getInstance().getSite().equals(SiteEnum.WANNONCE)) {
 			wannonceRadio.setSelected(true);
-		} else if (ResourcesManager.getInstance().getSite().equals(SiteEnum.GTROUVE)) {
+		/*} else if (ResourcesManager.getInstance().getSite().equals(SiteEnum.GTROUVE)) {
 			gtrouveRadio.setSelected(true);
-		}
+		}*/
 		if (ResourcesManager.getInstance().getGenders().contains(GenderEnum.HOMME)) {
 			manCb.setSelected(true);
 		} else {
