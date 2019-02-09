@@ -64,12 +64,18 @@ public class Util {
 	 */
 	public static Date dateFromString(final String pDateStr) {
 		if (pDateStr != null) {
-			Pattern lPattern = Pattern.compile("moins de \\d{1,2} heure[s]?");
-			Matcher lMatcher = lPattern.matcher(pDateStr);
-			if (lMatcher.matches()) {
+			if (Pattern.compile("moins de \\d{1,2} heure[s]?").matcher(pDateStr).matches()) {
 				Integer lHours = Ints.tryParse(CharMatcher.DIGIT.retainFrom(pDateStr));
 				if (lHours != null) {
 					return new DateTime().minusHours(lHours).toDate();
+				} else {
+					LOG.error("Date incorrecte: " + pDateStr);
+				}
+			}
+			if (Pattern.compile("moins de \\d{1,2} minute[s]?").matcher(pDateStr).matches()) {
+				Integer lMinutes = Ints.tryParse(CharMatcher.DIGIT.retainFrom(pDateStr));
+				if (lMinutes != null) {
+					return new DateTime().minusMinutes(lMinutes).toDate();
 				} else {
 					LOG.error("Date incorrecte: " + pDateStr);
 				}
