@@ -47,6 +47,8 @@ public class UtilTest extends TestCase {
 		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(1).toDate(), Util.dateFromString("moins de 1 minute")));
 		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(11).toDate(), Util.dateFromString("moins de 11 minutes")));
 		assertEquals(0, lComparator.compare(new DateTime().minusHours(6).toDate(), Util.dateFromString("moins de 6 heures")));
+		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(21).toDate(), Util.dateFromString("moins de 21 minutes")));
+		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(1).toDate(), Util.dateFromString("moins de 1 minute")));
 		assertEquals(0, lComparator.compare(new DateTime().minusHours(10).toDate(), Util.dateFromString("moins de 10 heures")));
 		assertEquals(0, lComparator.compare(new DateTime().minusHours(14).toDate(), Util.dateFromString("moins de 14 heures")));
 		assertEquals(0, lComparator.compare(new DateTime().minusHours(24).toDate(), Util.dateFromString("moins de 24 heures")));
