@@ -1,5 +1,6 @@
 # scrapad
 TODO
+- Résoudre bug quand annonce = moins de xx minutes
 - Implémenter une console GUI pour rediriger les logs.
 - Résoudre le problème de la suppression
 

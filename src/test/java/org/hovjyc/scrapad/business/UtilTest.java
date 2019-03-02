@@ -12,10 +12,12 @@ import org.joda.time.DateTimeFieldType;
 import junit.framework.TestCase;
 
 /**
- * Teste la classe Util
+ * Test Util class.
  */
 public class UtilTest extends TestCase {
 
+    /** The current year.*/
+    private static final int CURRENT_YEAR = Calendar.getInstance().get(Calendar.YEAR);
     /**
      * Test de containsKeyWord()
      */
@@ -35,21 +37,23 @@ public class UtilTest extends TestCase {
     }
     
 	/**
-	 * Test de dateFromString()
+	 * Test dateFromString()
 	 */
 	public void testDateFromString() {
 		DateTimeComparator lComparator = DateTimeComparator.getInstance(
 		         DateTimeFieldType.minuteOfHour());
 		
 		assertEquals(0, lComparator.compare(new DateTime().minusHours(1).toDate(), Util.dateFromString("moins de 1 heure")));
+		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(1).toDate(), Util.dateFromString("moins de 1 minute")));
+		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(11).toDate(), Util.dateFromString("moins de 11 minutes")));
 		assertEquals(0, lComparator.compare(new DateTime().minusHours(6).toDate(), Util.dateFromString("moins de 6 heures")));
 		assertEquals(0, lComparator.compare(new DateTime().minusHours(10).toDate(), Util.dateFromString("moins de 10 heures")));
 		assertEquals(0, lComparator.compare(new DateTime().minusHours(14).toDate(), Util.dateFromString("moins de 14 heures")));
 		assertEquals(0, lComparator.compare(new DateTime().minusHours(24).toDate(), Util.dateFromString("moins de 24 heures")));
 		
-		assertEquals(0, lComparator.compare(new DateTime(Calendar.getInstance().get(Calendar.YEAR), 12, 21, 0, 0).toDate(), Util.dateFromString("21 décembre")));
-		assertEquals(0, lComparator.compare(new DateTime(Calendar.getInstance().get(Calendar.YEAR), 12, 31, 0, 0).toDate(), Util.dateFromString("31 décembre")));
-		assertEquals(0, lComparator.compare(new DateTime(Calendar.getInstance().get(Calendar.YEAR), 1, 1, 0, 0).toDate(), Util.dateFromString("1 janvier")));
+		assertEquals(0, lComparator.compare(new DateTime(CURRENT_YEAR, 12, 21, 0, 0).toDate(), Util.dateFromString("21 décembre")));
+		assertEquals(0, lComparator.compare(new DateTime(CURRENT_YEAR, 12, 31, 0, 0).toDate(), Util.dateFromString("31 décembre")));
+		assertEquals(0, lComparator.compare(new DateTime(CURRENT_YEAR, 1, 1, 0, 0).toDate(), Util.dateFromString("1 janvier")));
 		
 		assertEquals(0, lComparator.compare(new DateTime(2014, 12, 21, 0, 0).toDate(), Util.dateFromString("21 décembre 2014")));
 		assertEquals(0, lComparator.compare(new DateTime(2016, 8, 12, 0, 0).toDate(), Util.dateFromString("12 août 2016")));
@@ -57,12 +61,12 @@ public class UtilTest extends TestCase {
 	}
 
 	/**
-	 * Test de stringFromDate()
+	 * Test stringFromDate()
 	 */
 	public void testStringFromDate() {   
-        assertEquals(Util.stringFromDate(new DateTime(Calendar.getInstance().get(Calendar.YEAR), 12, 21, 0, 0).toDate()), "21/12/2018");
-        assertEquals(Util.stringFromDate(new DateTime(Calendar.getInstance().get(Calendar.YEAR), 12, 31, 0, 0).toDate()), "31/12/2018");
-        assertEquals(Util.stringFromDate(new DateTime(Calendar.getInstance().get(Calendar.YEAR), 1, 1, 0, 0).toDate()), "01/01/2018");
+        assertEquals(Util.stringFromDate(new DateTime(CURRENT_YEAR, 12, 21, 0, 0).toDate()), "21/12/" + CURRENT_YEAR);
+        assertEquals(Util.stringFromDate(new DateTime(CURRENT_YEAR, 12, 31, 0, 0).toDate()), "31/12/" + CURRENT_YEAR);
+        assertEquals(Util.stringFromDate(new DateTime(CURRENT_YEAR, 1, 1, 0, 0).toDate()), "01/01/" + CURRENT_YEAR);
         
         assertEquals(Util.stringFromDate(new DateTime(2014, 12, 21, 0, 0).toDate()), "21/12/2014");
         assertEquals(Util.stringFromDate(new DateTime(2016, 8, 12, 0, 0).toDate()), "12/08/2016");

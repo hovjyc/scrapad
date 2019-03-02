@@ -74,6 +74,17 @@ public class Util {
 					LOG.error("Date incorrecte: " + pDateStr);
 				}
 			}
+			Pattern lPattern2 = Pattern.compile("moins de \\d{1,2} minute[s]?");
+            Matcher lMatcher2 = lPattern2.matcher(pDateStr);
+            if (lMatcher2.matches()) {
+                Integer lMinutes = Ints.tryParse(CharMatcher.DIGIT.retainFrom(pDateStr));
+                if (lMinutes != null) {
+                    return new DateTime().minusMinutes(lMinutes).toDate();
+                } else {
+                    LOG.error("Date incorrecte: " + pDateStr);
+                }
+            }
+            
 			for (String lFormat : DATE_FORMATS) {
 				try {
 					if (lFormat.equals(DD_MMMMM)) {
