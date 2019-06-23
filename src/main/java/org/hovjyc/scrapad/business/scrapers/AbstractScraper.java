@@ -15,7 +15,7 @@ public abstract class AbstractScraper {
 	protected static final int TIMEOUT = 12000;
 
 	/** The maximal time to wait before opening a link. */
-	protected static final int WAIT_TIME = 1000;
+	protected static final int WAIT_TIME = 1500;
 
 	/** List of ad scrap listeners. */
 	private List<IAdScrapListener> adScrapListeners;

@@ -113,6 +113,47 @@ public class Util {
     }
 
     /**
+     * Indicates if the height/weight ratio is fat or not
+     * 
+     * @param pHeight
+     *            The height of the announcer
+     * @param pWeight
+     *            The weight of the announcer
+     * @return True if the announcer is fat, false otherwise.
+     */
+    public static boolean isFat(String pHeight, String pWeight) {
+        if (pHeight == "-" || pWeight == "-") {
+            // Impossible to determine the IMC.
+            return false;
+        }
+        Pattern lPattern = Pattern.compile("\\d+");
+        // Extract the height
+        double lHeight = 0;
+        Matcher lMatcher = lPattern.matcher(pHeight);
+        if (lMatcher.find()) {
+            lHeight = Integer.parseInt(lMatcher.group());
+        }
+        // Extract the weight
+        double lWeight = 0;
+        lMatcher = lPattern.matcher(pWeight);
+        if (lMatcher.find()) {
+            lWeight = Integer.parseInt(lMatcher.group());
+        }
+        if (lHeight == 0 || lWeight == 0) {
+            // Impossible to determine the IMC.
+            return false;
+        }
+        if (lHeight < 150d) {
+            // Not fat but too small
+            return true;
+        }
+        // Calcul the IMC
+        LOG.info("Taille/Poids: " + lHeight + ", " + lWeight);
+        double lImc = lWeight / ((lHeight / 100) * (lHeight / 100)); 
+        return lImc >= 24; 
+    }
+
+    /**
      * Convert Date to dd/MM/yyyy string format.
      * 
      * @param pDate

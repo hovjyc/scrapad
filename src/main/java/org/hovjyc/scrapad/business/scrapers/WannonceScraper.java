@@ -182,51 +182,33 @@ public class WannonceScraper extends AbstractScraper {
                                     if (ResourcesManager.getInstance().getPseudos().contains(lPseudo)) {
                                         LOG.info("'" + lPseudo + "' est banni, annonce ignorée.");
                                     } else {
-                                        Elements lDescriptionElt = lAdPage.getElementsByClass("txtannonce");
-                                        if (lDescriptionElt.isEmpty()) {
-                                            LOG.error("Erreur: Impossible de récupérer la description");
+                                        Element lInfoTab = lAdPage.getElementById("tabannoncebody2");
+                                        String lHeight = lInfoTab.getElementsByClass("right_tf").get(1).text();
+                                        String lWeight = lInfoTab.getElementsByClass("right_tf2").get(2).text();
+                                        if (Util.isFat(lHeight, lWeight)) {
+                                            LOG.info("Annonce rejetée: mauvais ratio taille/poids");
                                         } else {
-                                            StringBuilder lDescriptionBuilder = new StringBuilder();
-                                            // Get only the text node elements to exclude the wannonce comments
-                                            for (Element lElement : lDescriptionElt) {
-                                                for (Node lNode : lElement.childNodes()) {
-                                                    if (lNode instanceof TextNode) {
-                                                        lDescriptionBuilder.append(((TextNode) lNode).text());
+                                            Elements lDescriptionElt = lAdPage.getElementsByClass("txtannonce");
+                                            if (lDescriptionElt.isEmpty()) {
+                                                LOG.error("Erreur: Impossible de récupérer la description");
+                                            } else {
+                                                StringBuilder lDescriptionBuilder = new StringBuilder();
+                                                // Get only the text node elements to exclude the wannonce comments
+                                                for (Element lElement : lDescriptionElt) {
+                                                    for (Node lNode : lElement.childNodes()) {
+                                                        if (lNode instanceof TextNode) {
+                                                            lDescriptionBuilder.append(((TextNode) lNode).text());
+                                                        }
                                                     }
                                                 }
-                                            }
-                                            String lDescription = lDescriptionBuilder.toString();
-                                            String lGoodWord = Util.containsKeyWord(lDescription,
-                                                    ResourcesManager.getInstance().getGoodKeywords());
-                                            if (lGoodWord != null) {
-                                                Ad lAd = new Ad(lTitle, lPseudo, lDescription, lLocation, lDate, lURL);
-                                                LOG.info("Mot qualifiant trouvé : '" + lGoodWord
-                                                        + "'. Ajout de l'annonce dans la liste.");
-                                                fireAdScraped(lAd);
-                                                lNbAds++;
-                                                if (lNbAds >= ResourcesManager.getInstance().getMaxNbAds()) {
-                                                    // Ad too old : end of the scrap.
-                                                    LOG.info("Nombre d'annonces affichées : " + lNbAds
-                                                            + ". Fin du parcours");
-                                                    return lNbAds;
-                                                }
-                                            } else {
-                                                String lBadWord = Util.containsKeyWord(lDescription,
-                                                        ResourcesManager.getInstance().getBadKeywords());
-                                                if (lBadWord != null) {
-                                                    LOG.info("Annonce rejetée car contenant le mot: '" + lBadWord
-                                                            + "'. Utilisateur '" + lPseudo + "' banni.");
-                                                    ResourcesManager.getInstance().getPseudos().add(lPseudo);
-                                                } else if (lAdPage.getElementsByClass("noncom").isEmpty()) {
-                                                    LOG.info("Annonce rejetée car numéro présent. Utilisateur '"
-                                                            + lPseudo + "' banni.");
-                                                    ResourcesManager.getInstance().getPseudos().add(lPseudo);
-                                                } else {
-                                                    // If the ad does not contains any phone number
-                                                    // and does not contains any bad words, we add it.
+                                                String lDescription = lDescriptionBuilder.toString();
+                                                String lGoodWord = Util.containsKeyWord(lDescription,
+                                                        ResourcesManager.getInstance().getGoodKeywords());
+                                                if (lGoodWord != null) {
                                                     Ad lAd = new Ad(lTitle, lPseudo, lDescription, lLocation, lDate,
                                                             lURL);
-                                                    LOG.info("Ajout de l'annonce dans la liste.");
+                                                    LOG.info("Mot qualifiant trouvé : '" + lGoodWord
+                                                            + "'. Ajout de l'annonce dans la liste.");
                                                     fireAdScraped(lAd);
                                                     lNbAds++;
                                                     if (lNbAds >= ResourcesManager.getInstance().getMaxNbAds()) {
@@ -234,6 +216,32 @@ public class WannonceScraper extends AbstractScraper {
                                                         LOG.info("Nombre d'annonces affichées : " + lNbAds
                                                                 + ". Fin du parcours");
                                                         return lNbAds;
+                                                    }
+                                                } else {
+                                                    String lBadWord = Util.containsKeyWord(lDescription,
+                                                            ResourcesManager.getInstance().getBadKeywords());
+                                                    if (lBadWord != null) {
+                                                        LOG.info("Annonce rejetée car contenant le mot: '" + lBadWord
+                                                                + "'. Utilisateur '" + lPseudo + "' banni.");
+                                                        ResourcesManager.getInstance().getPseudos().add(lPseudo);
+                                                    } else if (lAdPage.getElementsByClass("noncom").isEmpty()) {
+                                                        LOG.info("Annonce rejetée car numéro présent. Utilisateur '"
+                                                                + lPseudo + "' banni.");
+                                                        ResourcesManager.getInstance().getPseudos().add(lPseudo);
+                                                    } else {
+                                                        // If the ad does not contains any phone number
+                                                        // and does not contains any bad words, we add it.
+                                                        Ad lAd = new Ad(lTitle, lPseudo, lDescription, lLocation, lDate,
+                                                                lURL);
+                                                        LOG.info("Ajout de l'annonce dans la liste.");
+                                                        fireAdScraped(lAd);
+                                                        lNbAds++;
+                                                        if (lNbAds >= ResourcesManager.getInstance().getMaxNbAds()) {
+                                                            // Ad too old : end of the scrap.
+                                                            LOG.info("Nombre d'annonces affichées : " + lNbAds
+                                                                    + ". Fin du parcours");
+                                                            return lNbAds;
+                                                        }
                                                     }
                                                 }
                                             }

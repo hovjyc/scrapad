@@ -37,7 +37,7 @@ public class UtilTest extends TestCase {
     }
     
 	/**
-	 * Test dateFromString()
+	 * Test dateFromString().
 	 */
 	public void testDateFromString() {
 		DateTimeComparator lComparator = DateTimeComparator.getInstance(
@@ -60,6 +60,20 @@ public class UtilTest extends TestCase {
 		assertEquals(0, lComparator.compare(new DateTime(2014, 12, 21, 0, 0).toDate(), Util.dateFromString("21 décembre 2014")));
 		assertEquals(0, lComparator.compare(new DateTime(2016, 8, 12, 0, 0).toDate(), Util.dateFromString("12 août 2016")));
 		assertEquals(0, lComparator.compare(new DateTime(2015, 2, 14, 0, 0).toDate(), Util.dateFromString("14 février 2015")));
+	}
+	
+	/**
+	 * Test isFat().
+	 */
+	public void testIsFat() {
+	    assertTrue(Util.isFat("170 cm", "80 kg"));
+	    assertTrue(Util.isFat("160 cm", "65 kg"));
+	    assertTrue(Util.isFat("149 cm", "40 kg"));
+	    assertTrue(Util.isFat("160 cm", "62 kg"));
+	    assertFalse(Util.isFat("160 cm", "60 kg"));
+	    assertFalse(Util.isFat("-", "60 kg"));
+	    assertFalse(Util.isFat("160 cm", "-"));
+	    assertFalse(Util.isFat("-", "-"));
 	}
 
 	/**
