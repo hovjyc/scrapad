@@ -6,12 +6,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.primitives.Ints;
@@ -110,6 +113,26 @@ public class Util {
         }
         LOG.error("Date incorrecte: " + pDateStr);
         return null;
+    }
+    
+    /**
+     * In Elements objects, search for a String which match the given pattern.
+     * 
+     * @param lElements
+     *            The elements.
+     * @param lPattern
+     *            The pattern.
+     * @return The Elements text which matches the pattern.
+     */
+    public static String getMatchingStringFromElements(List<Elements> pElementsList, String pPattern) {
+        for (Elements lElements : pElementsList) {
+            for (Element lElement : lElements) {
+                if (Pattern.compile(pPattern).matcher(lElement.text()).find()) {
+                    return lElement.text();
+                }
+            }
+        }
+        return "-";
     }
 
     /**

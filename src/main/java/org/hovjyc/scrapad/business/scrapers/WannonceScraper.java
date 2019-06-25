@@ -2,9 +2,12 @@ package org.hovjyc.scrapad.business.scrapers;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.hovjyc.scrapad.business.ResourcesManager;
@@ -183,8 +186,11 @@ public class WannonceScraper extends AbstractScraper {
                                         LOG.info("'" + lPseudo + "' est banni, annonce ignorée.");
                                     } else {
                                         Element lInfoTab = lAdPage.getElementById("tabannoncebody2");
-                                        String lHeight = lInfoTab.getElementsByClass("right_tf").get(1).text();
-                                        String lWeight = lInfoTab.getElementsByClass("right_tf2").get(2).text();
+                                        List<Elements> lElementsList = new ArrayList<Elements>();
+                                        lElementsList.add(lInfoTab.getElementsByClass("right_tf"));
+                                        lElementsList.add(lInfoTab.getElementsByClass("right_tf2"));                                        
+                                        String lHeight = Util.getMatchingStringFromElements(lElementsList, "\\d+ cm");
+                                        String lWeight = Util.getMatchingStringFromElements(lElementsList, "\\d+ kg");
                                         if (Util.isFat(lHeight, lWeight)) {
                                             LOG.info("Annonce rejetée: mauvais ratio taille/poids");
                                         } else {
