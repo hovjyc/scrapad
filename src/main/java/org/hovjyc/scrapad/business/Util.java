@@ -67,7 +67,7 @@ public class Util {
      */
     public static Date dateFromString(final String pDateStr) {
         if (pDateStr != null) {
-            if (Pattern.compile("moins de \\d{1,2} heure[s]?").matcher(pDateStr).matches()) {
+            if (Pattern.compile("Il y a \\d{1,2} heure[s]?").matcher(pDateStr).matches()) {
                 Integer lHours = Ints.tryParse(CharMatcher.DIGIT.retainFrom(pDateStr));
                 if (lHours != null) {
                     return new DateTime().minusHours(lHours).toDate();
@@ -76,7 +76,7 @@ public class Util {
                 }
             }
 
-            Pattern lPattern2 = Pattern.compile("moins de \\d{1,2} minute[s]?");
+            Pattern lPattern2 = Pattern.compile("Il y a \\d{1,2} minute[s]?");
             Matcher lMatcher2 = lPattern2.matcher(pDateStr);
             if (lMatcher2.matches()) {
                 Integer lMinutes = Ints.tryParse(CharMatcher.DIGIT.retainFrom(pDateStr));

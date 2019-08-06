@@ -43,15 +43,15 @@ public class UtilTest extends TestCase {
 		DateTimeComparator lComparator = DateTimeComparator.getInstance(
 		         DateTimeFieldType.minuteOfHour());
 		
-		assertEquals(0, lComparator.compare(new DateTime().minusHours(1).toDate(), Util.dateFromString("moins de 1 heure")));
-		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(1).toDate(), Util.dateFromString("moins de 1 minute")));
-		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(11).toDate(), Util.dateFromString("moins de 11 minutes")));
-		assertEquals(0, lComparator.compare(new DateTime().minusHours(6).toDate(), Util.dateFromString("moins de 6 heures")));
-		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(21).toDate(), Util.dateFromString("moins de 21 minutes")));
-		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(1).toDate(), Util.dateFromString("moins de 1 minute")));
-		assertEquals(0, lComparator.compare(new DateTime().minusHours(10).toDate(), Util.dateFromString("moins de 10 heures")));
-		assertEquals(0, lComparator.compare(new DateTime().minusHours(14).toDate(), Util.dateFromString("moins de 14 heures")));
-		assertEquals(0, lComparator.compare(new DateTime().minusHours(24).toDate(), Util.dateFromString("moins de 24 heures")));
+		assertEquals(0, lComparator.compare(new DateTime().minusHours(1).toDate(), Util.dateFromString("Il y a 1 heure")));
+		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(1).toDate(), Util.dateFromString("Il y a 1 minute")));
+		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(11).toDate(), Util.dateFromString("Il y a 11 minutes")));
+		assertEquals(0, lComparator.compare(new DateTime().minusHours(6).toDate(), Util.dateFromString("Il y a 6 heures")));
+		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(21).toDate(), Util.dateFromString("Il y a 21 minutes")));
+		assertEquals(0, lComparator.compare(new DateTime().minusMinutes(1).toDate(), Util.dateFromString("Il y a 1 minute")));
+		assertEquals(0, lComparator.compare(new DateTime().minusHours(10).toDate(), Util.dateFromString("Il y a 10 heures")));
+		assertEquals(0, lComparator.compare(new DateTime().minusHours(14).toDate(), Util.dateFromString("Il y a 14 heures")));
+		assertEquals(0, lComparator.compare(new DateTime().minusHours(24).toDate(), Util.dateFromString("Il y a 24 heures")));
 		
 		assertEquals(0, lComparator.compare(new DateTime(CURRENT_YEAR, 12, 21, 0, 0).toDate(), Util.dateFromString("21 décembre")));
 		assertEquals(0, lComparator.compare(new DateTime(CURRENT_YEAR, 12, 31, 0, 0).toDate(), Util.dateFromString("31 décembre")));
