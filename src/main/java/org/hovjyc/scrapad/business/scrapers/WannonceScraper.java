@@ -1,6 +1,5 @@
 package org.hovjyc.scrapad.business.scrapers;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class WannonceScraper extends AbstractScraper {
 	// Ensure that z6=0 is present in the URLs else only the ads with photos will be
 	// displayed. z3 is the offer kind (offre/recherche).
 	private static final String BASE_URL = WANNONCE_URL
-			+ "/rencontres-adultes-85/?typefilt=loc&pa=fr&localisation=&georayon=50&z3=3&z5=1&fraich=1&z6=0&zok=1&z2=6935%2C_dynform&zbtn=1&z1=0&";
+			+ "/rencontres-adultes-85/?typefilt=loc&pa=fr&localisation=&georayon=30&z3=3&z5=1&fraich=1&zok=1&z2=6930%2C_dynform&zbtn=1&z1=0&";
 	/** URL part corresponding to the woman search. */
 	private static final String URL_PART_WOMAN = "num1=2";
 
@@ -112,7 +111,8 @@ public class WannonceScraper extends AbstractScraper {
 				// This cookie confirm that we are at least 18.
 				lCookies.put("setaduan", "oui");
 				// If this is the first page we use the base url with the cookies content.
-				lResponse = Jsoup.connect(BASE_URL + pURL).cookies(lCookies).ignoreContentType(true)
+				String lURL = BASE_URL + pURL;
+				lResponse = Jsoup.connect(lURL).cookies(lCookies).ignoreContentType(true)
 						.userAgent(IScrapadConstants.USER_AGENT).referrer(IScrapadConstants.REFERER).timeout(TIMEOUT)
 						.followRedirects(true).execute();
 				// Get the cookies to keep the forms info for the next page.
@@ -120,9 +120,10 @@ public class WannonceScraper extends AbstractScraper {
 			} else {
 				// Else we use the generic URL for pagination and we paste our cookies on the
 				// connection.
-				lResponse = Jsoup.connect("http://www.wannonce.com/rencontres-adultes-85/p" + pPage + ".htm?" + pURL)
-						.cookies(lCookies).ignoreContentType(true).userAgent(IScrapadConstants.USER_AGENT)
-						.referrer(IScrapadConstants.REFERER).timeout(TIMEOUT).followRedirects(true).execute();
+				String lURL = "http://www.wannonce.com/rencontres-adultes-85/p" + pPage + ".htm?" + pURL;
+				lResponse = Jsoup.connect(lURL).cookies(lCookies).ignoreContentType(true)
+						.userAgent(IScrapadConstants.USER_AGENT).referrer(IScrapadConstants.REFERER).timeout(TIMEOUT)
+						.followRedirects(true).execute();
 			}
 
 			Document lPage = lResponse.parse();
@@ -152,7 +153,7 @@ public class WannonceScraper extends AbstractScraper {
 					} else {
 						Element lTitleElt = lTitleURLElt.get(0);
 						String lTitle = lTitleElt.text();
-						String lURL = WANNONCE_URL + lTitleElt.select("a").attr("href");
+						String lURL = lTitleElt.select("a").attr("href");
 						// URL and title scraped.
 						Elements lTxtAdElt = lAdElt.getElementsByClass("_annonce-mv1-texte nowrap-txt");
 						String lTxtAd = lTxtAdElt.text();
